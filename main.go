@@ -2,16 +2,24 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"net/http"
+
+	aklog "github.com/theplant/appkit/log"
+	"github.com/theplant/appkit/server"
 )
 
 func main() {
+	m := http.NewServeMux()
 
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "Hello, V2")
+	m.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintf(w, "Hello, V3 with log")
 	})
 
-	log.Println("Starting at 8080")
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	l := aklog.Default()
+	h := server.DefaultMiddleware(l)(m)
+	l.Info().Log("msg", "Starting at 8080")
+	err := http.ListenAndServe(":8080", h)
+	if err != nil {
+		l.WrapError(err).Log()
+	}
 }
