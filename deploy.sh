@@ -7,6 +7,7 @@ function build {
 }
 
 function push {
+	build
 	TAG=$(git rev-parse HEAD|cut -c 1-6)
 	docker tag sunfmin/helloapp hub.c.163.com/sunfmin/helloapp:$TAG
 	docker push hub.c.163.com/sunfmin/helloapp:$TAG
