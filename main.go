@@ -1,9 +1,10 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
 
+	"github.com/sunfmin/hello/config"
+	"github.com/sunfmin/hello/handlers"
 	aklog "github.com/theplant/appkit/log"
 	"github.com/theplant/appkit/server"
 )
@@ -11,9 +12,10 @@ import (
 func main() {
 	m := http.NewServeMux()
 
-	m.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "Hello, V3 with log")
-	})
+	mani := config.MustGetManifest()
+	mani.Mount(m)
+
+	m.HandleFunc("/", handlers.Home)
 
 	l := aklog.Default()
 	h := server.DefaultMiddleware(l)(m)

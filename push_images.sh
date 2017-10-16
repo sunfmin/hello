@@ -1,7 +1,7 @@
 function build {
 	ROOTDIR=$(PWD)
 	GOOS=linux GOARCH=amd64 go build -o helloapp main.go
-	cd $ROOTDIR/front/ && yarn && yarn build
+	cd $ROOTDIR/front/ && yarn && PUBLIC_URL=/hello yarn build
 	cd $ROOTDIR && docker build -t sunfmin/helloapp .
 	rm helloapp
 }
